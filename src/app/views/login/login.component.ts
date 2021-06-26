@@ -68,7 +68,7 @@ export class LoginComponent {
       (error) => {
         this.loading = false;
         this.loginInvalid = true;
-        this.message = error.error;
+        this.message = error.status === 0 ? 'El sistema se encuentra fuera de servicio, favor comuniquese con el area de sistemas' : error.error;
         this.alerts.forEach(x => x.msg = this.message);
       }
     );
