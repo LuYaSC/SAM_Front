@@ -28,7 +28,6 @@ export class AuthService {
     return this.http.post<JwtResponse>(this.base_url + 'login',
       dto).pipe(tap(
         (res: any) => {
-          debugger;
           if (res) {
             let decode: TokenDecodeDto = jwt_decode(res.token);
             this.saveToken(res.token, decode.exp);

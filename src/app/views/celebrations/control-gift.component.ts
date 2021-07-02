@@ -24,12 +24,14 @@ export class ControlGiftComponent implements OnInit {
   isMsg = false;
   messageError = '';
   disabledForm = false;
+  isCharging = false;
   dismissible = true;
   defaultAlerts: any[] = [
     {
-      type: 'danger',
-      msg: this.messageError
-    }
+      type: '',
+      msg: ''
+    },
+
   ];
   alerts = this.defaultAlerts;
 
@@ -61,12 +63,14 @@ export class ControlGiftComponent implements OnInit {
       if (this.beneficiaryDto.documentNumber.trim() === '') {
         this.isMsg = true;
         this.messageError = "El campo cédula de identidad no puede estar vacío";
+        this.alerts.forEach(x => x.type = 'danger');
         this.alerts.forEach(x => x.msg = this.messageError);
         return;
       }
       if (this.beneficiaryDto.documentNumber.length < 4) {
         this.isMsg = true;
         this.messageError = "El campo cédula de identidad debe contener mínimo 4 y máximo 10 caracteres";
+        this.alerts.forEach(x => x.type = 'danger');
         this.alerts.forEach(x => x.msg = this.messageError);
         return;
       }
@@ -74,6 +78,7 @@ export class ControlGiftComponent implements OnInit {
       if (this.beneficiaryDto.name.trim() === '') {
         this.isMsg = true;
         this.messageError = "El campo nombre no puede estar vacío";
+        this.alerts.forEach(x => x.type = 'danger');
         this.alerts.forEach(x => x.msg = this.messageError);
         return;
       }
@@ -91,6 +96,7 @@ export class ControlGiftComponent implements OnInit {
       } else {
         this.isMsg = true;
         this.messageError = resp.message;
+        this.alerts.forEach(x => x.type = 'danger');
         this.alerts.forEach(x => x.msg = this.messageError);
       }
     });
@@ -116,26 +122,35 @@ export class ControlGiftComponent implements OnInit {
 
   assingGift() {
     this.reset();
+    this.isCharging = true;
     if (this.assingGiftDto.officePlace === 0) {
       this.isMsg = true;
       this.messageError = "Debe seleccionar la Regional/Distrital";
+      this.alerts.forEach(x => x.type = 'danger');
       this.alerts.forEach(x => x.msg = this.messageError);
       return;
     }
     if (this.assingGiftDto.observations.trim() === '') {
       this.isMsg = true;
       this.messageError = "El campo observaciones no puede estar vacio";
+      this.alerts.forEach(x => x.type = 'danger');
       this.alerts.forEach(x => x.msg = this.messageError);
       return;
     }
     this.service.assingGift(this.assingGiftDto).subscribe((resp: AssingGiftResult) => {
       if (resp.isOk) {
         this.resetOptionSearch();
+        this.isMsg = this.disabledForm = true;
+        this.messageError = resp.message;
+        this.alerts.forEach(x => x.type = 'success');
+        this.alerts.forEach(x => x.msg = this.messageError);
       } else {
         this.isMsg = this.disabledForm = true;
         this.messageError = resp.message;
+        this.alerts.forEach(x => x.type = 'danger');
         this.alerts.forEach(x => x.msg = this.messageError);
       }
+      this.isCharging = false;
     });
   }
 }

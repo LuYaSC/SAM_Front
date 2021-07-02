@@ -55,6 +55,7 @@
         </div>
         <div class="card-footer">
           <button type="submit" class="btn btn-sm btn-primary" (click)="getDataBeneficiary()">Realizar Busqueda</button>
+          <button type="submit" class="btn btn-sm btn-warning" (click)="resetOptionSearch()">Limpiar Busqueda</button>
         </div>
       </div>
       <div *ngIf="isMsg">
@@ -156,7 +157,7 @@
         </div>
         <div class="card-footer">
           <button type="button" class="btn btn-sm btn-success" (click)="assingGift()"
-            [disabled]="disabledForm">Registrar Entrega</button>
+            [disabled]="disabledForm || isCharging">Registrar Entrega</button>
         </div>
       </div>
     </div>
